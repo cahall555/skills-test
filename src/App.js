@@ -75,7 +75,7 @@ const App = () => {
           <div key={Employee.id ? Employee.id : index} style={styles.Employee}>
             <p style={styles.EmployeeFirstName}>{Employee.firstname}</p>
             <p style={styles.EmployeeLastName}>{Employee.lastname}</p>
-            <p style={styles.EmployeeSkills}>{Employee.skills}</p>
+            {/* <p style={styles.EmployeeSkills}>{Employee.skills}</p> */}
           </div>
         ))
       }
