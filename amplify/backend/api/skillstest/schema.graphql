@@ -1,5 +1,18 @@
-type Todo @model {
+type Employee @model {
+  id: String!
+  firstname: String!
+  lastname: String!
+  skills: [EmployeeSkills] @connection(name: "EmployeeSkills")
+}
+
+type EmployeeSkills @model (queries: null){
   id: ID!
+  employee: Employee @connection(name: "EmployeeSkills")
+  skill: Skill @connection(name: "SkillEmployees")
+}
+
+type Skill @model {
+  id:String!
   name: String!
-  description: String
+  employees: [EmployeeSkills] @connection(name: "SkillEmployees")
 }

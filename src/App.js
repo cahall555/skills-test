@@ -1,8 +1,8 @@
 /* src/App.js */
 import React, { useEffect, useState } from 'react'
 import Amplify, { API, graphqlOperation } from 'aws-amplify'
-import { createTodo } from './graphql/mutations'
-import { listTodos } from './graphql/queries'
+import { createEmployee } from './graphql/mutations'
+import { listEmployees } from './graphql/queries'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import awsExports from "./aws-exports";
@@ -12,57 +12,70 @@ const initialState = { name: '', description: '' }
 
 const App = () => {
   const [formState, setFormState] = useState(initialState)
-  const [todos, setTodos] = useState([])
+  const [Employees, setEmployees] = useState([])
 
   useEffect(() => {
-    fetchTodos()
+    fetchEmployees()
   }, [])
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value })
   }
 
-  async function fetchTodos() {
+  async function fetchEmployees() {
     try {
-      const todoData = await API.graphql(graphqlOperation(listTodos))
-      const todos = todoData.data.listTodos.items
-      setTodos(todos)
-    } catch (err) { console.log('error fetching todos') }
+      const EmployeeData = await API.graphql(graphqlOperation(listEmployees))
+      const Employees = EmployeeData.data.listEmployees.items
+      setEmployees(Employees)
+    } catch (err) { console.log('error fetching Employees') }
   }
 
-  async function addTodo() {
+  async function addEmployee() {
     try {
-      if (!formState.name || !formState.description) return
-      const todo = { ...formState }
-      setTodos([...todos, todo])
+      if (!formState.id || !formState.firstname) return
+      const Employee = { ...formState }
+      setEmployees([...Employees, Employee])
       setFormState(initialState)
-      await API.graphql(graphqlOperation(createTodo, {input: todo}))
+      await API.graphql(graphqlOperation(createEmployee, {input: Employee}))
     } catch (err) {
-      console.log('error creating todo:', err)
+      console.log('error creating Employee:', err)
     }
   }
 
   return (
     <div style={styles.container}>
-      <h2>Amplify Todos</h2>
+      <h2>Amplify Employees</h2>
       <input
-        onChange={event => setInput('name', event.target.value)}
+        onChange={event => setInput('id', event.target.value)}
         style={styles.input}
-        value={formState.name}
-        placeholder="Name"
+        value={formState.id}
+        placeholder="id"
       />
       <input
-        onChange={event => setInput('description', event.target.value)}
+        onChange={event => setInput('firstname', event.target.value)}
         style={styles.input}
-        value={formState.description}
-        placeholder="Description"
+        value={formState.firstname}
+        placeholder="First Name"
       />
-      <button style={styles.button} onClick={addTodo}>Create Todo</button>
+      <input
+        onChange={event => setInput('lastname', event.target.value)}
+        style={styles.input}
+        value={formState.lastname}
+        placeholder="Last Name"
+      />
+      <input
+        onChange={event => setInput('skills', event.target.value)}
+        style={styles.input}
+        value={formState.skills}
+        placeholder="Skills"
+      />
+      <button style={styles.button} onClick={addEmployee}>Create Employee</button>
       {
-        todos.map((todo, index) => (
-          <div key={todo.id ? todo.id : index} style={styles.todo}>
-            <p style={styles.todoName}>{todo.name}</p>
-            <p style={styles.todoDescription}>{todo.description}</p>
+        Employees.map((Employee, index) => (
+          <div key={Employee.id ? Employee.id : index} style={styles.Employee}>
+            <p style={styles.EmployeeFirstName}>{Employee.firstname}</p>
+            <p style={styles.EmployeeLastName}>{Employee.lastname}</p>
+            {/* <p style={styles.EmployeeSkills}>{Employee.skills}</p> */}
           </div>
         ))
       }
@@ -72,10 +85,10 @@ const App = () => {
 
 const styles = {
   container: { width: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 20 },
-  todo: {  marginBottom: 15 },
+  Employee: {  marginBottom: 15 },
   input: { border: 'none', backgroundColor: '#ddd', marginBottom: 10, padding: 8, fontSize: 18 },
-  todoName: { fontSize: 20, fontWeight: 'bold' },
-  todoDescription: { marginBottom: 0 },
+  EmployeeName: { fontSize: 20, fontWeight: 'bold' },
+  EmployeeDescription: { marginBottom: 0 },
   button: { backgroundColor: 'black', color: 'white', outline: 'none', fontSize: 18, padding: '12px 0px' }
 }
 
