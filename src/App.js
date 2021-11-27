@@ -4,11 +4,22 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify'
 import { createEmployee } from './graphql/mutations'
 import { listEmployees } from './graphql/queries'
 import { withAuthenticator } from '@aws-amplify/ui-react'
-
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import awsExports from "./aws-exports";
+import SaveIcon from '@material-ui/icons/Save';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import PersistentDrawerLeft from './components/Drawer/Drawer';
+// import DataTable from './components/DataTable/DataTable';
+
 Amplify.configure(awsExports);
 
-const initialState = { name: '', description: '' }
+const initialState = { id: '', firstname: '', lastname: '' }
 
 const App = () => {
   const [formState, setFormState] = useState(initialState)
@@ -21,6 +32,9 @@ const App = () => {
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value })
   }
+  // const handleChangeForm = name => event => {
+  //   setFormState({ ...formState, [name]: event.target.value });
+  // };
 
   async function fetchEmployees() {
     try {
@@ -42,34 +56,82 @@ const App = () => {
     }
   }
 
+  function SkillsCheckbox() {
+    const [checked, setChecked] = React.useState(true)
+    return (
+      <FormControlLabel
+        control={<Checkbox
+        checked={checked}
+        onChange={(e)=>setChecked(e.target.checked)}
+      />}
+      label="Add Skills"
+    />
+    )
+  }
+
+  function Form() {
+    return (
+      <div>
+        <Grid container spacing={24}>
+          <Grid item sm={2}>
+            <TextField
+            key={Employees.id}
+            onChange={event => {console.log(event.target.value); setInput('id', event.target.value)}}
+            value={formState.id}
+            label="id"
+          />
+          </Grid>
+          <Grid item sm={2}>
+          <TextField
+            value={formState.firstname}
+            onChange={event => setInput('firstname', event.target.value)}
+            label="First Name"
+            key="first name"
+          />
+          </Grid>
+          <Grid item sm={2}>
+            <TextField
+              onChange={event => setInput('lastname', event.target.value)}
+              value={formState.lastname}
+              label="Last Name"
+              key="last name"
+            />
+          </Grid>
+          {/* <Grid item sm={2}>
+            <TextField
+              // onChange={event => setInput('skills', event.target.value)}
+              id="standard-basic"
+              value={formState.name}
+              label="Skills"
+            />
+          </Grid> */}
+        </Grid>
+      </div>
+    )
+  }
+  
+
   return (
-    <div style={styles.container}>
-      <h2>Amplify Employees</h2>
-      <input
-        onChange={event => setInput('id', event.target.value)}
-        style={styles.input}
-        value={formState.id}
-        placeholder="id"
-      />
-      <input
-        onChange={event => setInput('firstname', event.target.value)}
-        style={styles.input}
-        value={formState.firstname}
-        placeholder="First Name"
-      />
-      <input
-        onChange={event => setInput('lastname', event.target.value)}
-        style={styles.input}
-        value={formState.lastname}
-        placeholder="Last Name"
-      />
-      <input
-        onChange={event => setInput('skills', event.target.value)}
-        style={styles.input}
-        value={formState.skills}
-        placeholder="Skills"
-      />
-      <button style={styles.button} onClick={addEmployee}>Create Employee</button>
+    <div>
+      <PersistentDrawerLeft />
+
+      <main>
+        
+        <Form />
+        <SkillsCheckbox />
+        
+          <Button 
+            color="primary" 
+            variant="contained"
+            onClick={addEmployee}>
+            Create Employee</Button>
+          <Button 
+          color="secondary"
+            variant="contained">
+            Add Skills </Button>
+      
+      </main>
+      {/* <DataTable /> */}
       {
         Employees.map((Employee, index) => (
           <div key={Employee.id ? Employee.id : index} style={styles.Employee}>
@@ -79,7 +141,7 @@ const App = () => {
           </div>
         ))
       }
-    </div>
+   </div>
   )
 }
 
