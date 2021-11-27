@@ -5,17 +5,14 @@ import { createEmployee } from './graphql/mutations'
 import { listEmployees } from './graphql/queries'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import awsExports from "./aws-exports";
-import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import PersistentDrawerLeft from './components/Drawer/Drawer';
-// import DataTable from './components/DataTable/DataTable';
+import EmployeeTable from './components/DataTable/EmployeeTable';
 
 Amplify.configure(awsExports);
 
@@ -32,9 +29,6 @@ const App = () => {
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value })
   }
-  // const handleChangeForm = name => event => {
-  //   setFormState({ ...formState, [name]: event.target.value });
-  // };
 
   async function fetchEmployees() {
     try {
@@ -75,10 +69,11 @@ const App = () => {
         <Grid container spacing={24}>
           <Grid item sm={2}>
             <TextField
-            key={Employees.id}
+            name="Employees.id"
             onChange={event => {console.log(event.target.value); setInput('id', event.target.value)}}
             value={formState.id}
             label="id"
+            key="employeeid"
           />
           </Grid>
           <Grid item sm={2}>
@@ -86,7 +81,7 @@ const App = () => {
             value={formState.firstname}
             onChange={event => setInput('firstname', event.target.value)}
             label="First Name"
-            key="first name"
+            key="firstname"
           />
           </Grid>
           <Grid item sm={2}>
@@ -94,7 +89,7 @@ const App = () => {
               onChange={event => setInput('lastname', event.target.value)}
               value={formState.lastname}
               label="Last Name"
-              key="last name"
+              key="lastname"
             />
           </Grid>
           {/* <Grid item sm={2}>
@@ -129,29 +124,11 @@ const App = () => {
           color="secondary"
             variant="contained">
             Add Skills </Button>
-      
+            <EmployeeTable />
       </main>
-      {/* <DataTable /> */}
-      {
-        Employees.map((Employee, index) => (
-          <div key={Employee.id ? Employee.id : index} style={styles.Employee}>
-            <p style={styles.EmployeeFirstName}>{Employee.firstname}</p>
-            <p style={styles.EmployeeLastName}>{Employee.lastname}</p>
-            {/* <p style={styles.EmployeeSkills}>{Employee.skills}</p> */}
-          </div>
-        ))
-      }
+    
    </div>
   )
-}
-
-const styles = {
-  container: { width: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 20 },
-  Employee: {  marginBottom: 15 },
-  input: { border: 'none', backgroundColor: '#ddd', marginBottom: 10, padding: 8, fontSize: 18 },
-  EmployeeName: { fontSize: 20, fontWeight: 'bold' },
-  EmployeeDescription: { marginBottom: 0 },
-  button: { backgroundColor: 'black', color: 'white', outline: 'none', fontSize: 18, padding: '12px 0px' }
 }
 
 export default withAuthenticator(App)

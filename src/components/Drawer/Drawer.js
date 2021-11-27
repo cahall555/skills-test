@@ -16,9 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
-// import PrecisionManufacturingIcon from '@material-ui/icons/PrecisionManufacturing';
-// import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import AdjustIcon from '@material-ui/icons/Adjust';
 import logo from "./skills.svg";
 
 const drawerWidth = 240;
@@ -137,7 +135,7 @@ const PersistentDrawerLeft = () => {
         <List>
           {['Employee', 'Skills'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <AdjustIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
