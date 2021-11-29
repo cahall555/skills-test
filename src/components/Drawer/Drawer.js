@@ -1,22 +1,25 @@
 import React from 'react';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import AdjustIcon from '@material-ui/icons/Adjust';
+// import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from "./skills.svg";
 
 const drawerWidth = 240;
@@ -92,6 +95,7 @@ const PersistentDrawerLeft = () => {
   };
 
   return (
+    <React.Fragment>
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
@@ -112,7 +116,7 @@ const PersistentDrawerLeft = () => {
           </IconButton>
           <img src={logo} alt="logo" className={classes.logo} height="70" />
           <Typography variant="h6" noWrap>
-            Employees and Skills
+            <Button style={{color: "white"}} component={Link} to ="/"variant="text">Employees and Skills</Button>
           </Typography>
           
         </Toolbar>
@@ -132,14 +136,24 @@ const PersistentDrawerLeft = () => {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Employee', 'Skills'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <AdjustIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <MenuList>
+          <MenuItem component={Link} to="/employee">
+            <ListItemIcon>
+              <PersonIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Employee</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+            </Typography>
+          </MenuItem>
+          <MenuItem component={Link} to="/skills">
+            <ListItemIcon>
+              <AdjustIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Skills</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+            </Typography>
+          </MenuItem>
+        </MenuList>
       </Drawer>
       <main
         className={clsx(classes.content, {
@@ -153,6 +167,7 @@ const PersistentDrawerLeft = () => {
         
       </main>
     </div>
+    </React.Fragment>
   );
 }
 export default PersistentDrawerLeft;

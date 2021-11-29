@@ -1,7 +1,6 @@
 /* src/App.js */
 import React from 'react'
-import PersistentDrawerLeft from './components/Drawer/Drawer';
-import EmployeeTable from './components/DataTable/EmployeeTable';
+import EmployeeTable from './components/DataTables/EmployeeTable';
 
 
 
@@ -9,14 +8,9 @@ import EmployeeTable from './components/DataTable/EmployeeTable';
 const EmployeePage = () => {
   
   return (
-    <div>
-      <PersistentDrawerLeft />
-
-      <main>
-            <EmployeeTable />
-      </main>
-    
-   </div>
+        <main>
+              <EmployeeTable />
+        </main>
   )
 }
 

@@ -1,4 +1,8 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import EmployeePage from 'Employee';
+import PersistentDrawerLeft from 'components/Drawer/Drawer';
+import SkillsPage from 'Skills';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -9,7 +13,16 @@ Amplify.configure(awsExports);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <>
+    <Router>
+    <PersistentDrawerLeft />
+      <Routes>
+          <Route exact path='/' element={<App />} />
+          <Route path='/Employee' element={<EmployeePage />} />
+          <Route path='/Skills' element={<SkillsPage />} />
+        </Routes>
+    </Router>
+    </>
   </React.StrictMode>,
   document.getElementById('root')
 );
