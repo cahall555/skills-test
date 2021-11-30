@@ -1,98 +1,112 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { Box, Grid } from "@material-ui/core";
+import SelectSkills from 'components/Dropdown/SkillsDropdown';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
-
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-      <React.Fragment>
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
-
-        <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
-    </Dialog>
-    </React.Fragment>
-  );
-}
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
-
-const SimpleDialogDemo = () => {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-  return (
-      <React.Fragment>
-    <div>
-      <Typography variant="subtitle1" component="div">
-        Selected: {selectedValue}
-      </Typography>
-      <br />
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open simple dialog
-      </Button>
-      <SimpleDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      />
-    </div>
-    </React.Fragment>
-  );
-}
-
-export default SimpleDialogDemo();
+const SkillsDialog = () => {
+    const [open, setOpen] = React.useState(false);
+    const [values, setValues] = React.useState([]);
+    const [text, setText] = React.useState("");
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+      setValues([]);
+    };
+    const handleChangeText = (e) => {
+      setText(e.target.value);
+    };
+    const addValue = () => {
+      setValues([...values, ""]);
+    };
+    const handleValueChange = (index, e) => {
+      const updatedValues = values.map((value, i) => {
+        if (i === index) {
+          return e.target.value;
+        } else {
+          return value;
+        }
+      });
+      setValues(updatedValues);
+    };
+    const deleteValue = (jump) => {
+      setValues(values.filter((j) => j !== jump));
+    };
+  
+    return (
+      <div>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          Skills
+        </Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add Skills</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Add Employee Skills.</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              value={text}
+              onChange={handleChangeText}
+              label="Employee ID"
+              fullWidth
+            />
+            {values.map((jump, index) => (
+              <Box key={"jump" + index}>
+                <Grid container spacing={1} alignItems="flex-end">
+                  <Grid item xs={10}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      label="Skill Id"
+                      value={jump || ""}
+                      onChange={(e) => handleValueChange(index, e)}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={10}>
+                    <SelectSkills />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <div
+                      className="font-icon-wrapper"
+                      onClick={() => deleteValue(jump)}
+                    >
+                      <IconButton aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  </Grid>
+                </Grid>
+              </Box>
+            ))}
+          </DialogContent>
+          <Button onClick={addValue} color="primary">
+            Add
+          </Button>
+          <DialogActions>
+            <Button onClick={handleClose} variant="contained" color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} variant="contained" color="primary">
+              Create
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+export default SkillsDialog;

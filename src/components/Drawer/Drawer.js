@@ -18,7 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import AdjustIcon from '@material-ui/icons/Adjust';
-// import { withRouter } from 'react-router-dom';
+import HomeIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
 import logo from "./skills.svg";
 
@@ -137,6 +137,14 @@ const PersistentDrawerLeft = () => {
         </div>
         <Divider />
         <MenuList>
+        <MenuItem component={Link} to="/">
+            <ListItemIcon>
+              <HomeIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Home</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+            </Typography>
+          </MenuItem>
           <MenuItem component={Link} to="/employee">
             <ListItemIcon>
               <PersonIcon fontSize="small" />
@@ -161,9 +169,6 @@ const PersistentDrawerLeft = () => {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography paragraph>
-         Create, edit and delete employees and employee skills here.
-        </Typography>
         
       </main>
     </div>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { styled } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,11 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import { listSkills } from '../../graphql/queries';
-import awsExports from "../../aws-exports";
-Amplify.configure(awsExports);
-
+import Typography from '@material-ui/core/Typography';
+import useFetchSkills from 'utils/FetchSkills';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -31,23 +28,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 const SkillsTable =() => {
+  const {Skills} = useFetchSkills();
 
-  const [Skills, setSkills] = useState([])
-
-   useEffect(() => {
-    fetchSkills()
-  }, [])
-
-  async function fetchSkills() {
-    try {
-      const SkillData = await API.graphql(graphqlOperation(listSkills))
-      const Skills = SkillData.data.listSkills.items
-      setSkills(Skills)
-    } catch (err) { console.log('error fetching Skills') }
-  }
   return (
     <React.Fragment>
     <TableContainer component={Paper}>
+    <Typography variant="h3" component="div" gutterBottom>
+        Skills
+      </Typography>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

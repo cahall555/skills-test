@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled, useTheme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -12,15 +12,12 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import { listEmployees } from '../../graphql/queries';
-import awsExports from "../../aws-exports";
-Amplify.configure(awsExports);
-
+import useFetchEmployees from '../../utils/FetchEmployees';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -101,23 +98,10 @@ TablePaginationActions.propTypes = {
 
 const EmployeeTable =() => {
 
-  const [Employees, setEmployees] = useState([])
+  const {Employees} = useFetchEmployees();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  
-
-   useEffect(() => {
-    fetchEmployees()
-  }, [])
-
-  async function fetchEmployees() {
-    try {
-      const EmployeeData = await API.graphql(graphqlOperation(listEmployees))
-      const Employees = EmployeeData.data.listEmployees.items
-      setEmployees(Employees)
-    } catch (err) { console.log('error fetching Employees') }
-  }
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Employees.length) : 0;
@@ -134,6 +118,9 @@ const EmployeeTable =() => {
   return (
     <React.Fragment>
     <TableContainer component={Paper}>
+    <Typography variant="h3" component="div" gutterBottom>
+        Employees
+      </Typography>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
