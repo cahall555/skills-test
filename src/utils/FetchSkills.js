@@ -19,7 +19,7 @@ const [Skills, setSkills] = useState([])
     useEffect(() => {
         fetchSkills()
     }, [])
-    return {Skills, setSkills}
+    return {Skills, fetchSkills}
 }
 
 export default useFetchSkills;

@@ -13,18 +13,11 @@ Amplify.configure(awsExports);
 const App = () => {
 
   return (
-    <React.Fragment>
-      <div>
-        <SkillsDialog />
-        <main>
-                <EntryForm />
-        
-              <EmployeeTable />
-              
-              <SkillsTable />
-        </main>
-
-    </div>
+    <React.Fragment> 
+      <SkillsDialog />
+      <EntryForm />
+      <EmployeeTable />
+      <SkillsTable />
   </React.Fragment>
   )
 }

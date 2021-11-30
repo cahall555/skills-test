@@ -6,10 +6,10 @@ import Select from '@material-ui/core/Select';
 import useFetchSkills from 'utils/FetchSkills';
 
 const SelectSkills = () => {
-    const {Skills, setSkills} = useFetchSkills();
+    const {Skills, fetchSkills} = useFetchSkills();
 
   const handleChange = (event) => {
-    setSkills(event.target.value);
+    fetchSkills(event.target.value);
   };
 
   return (
