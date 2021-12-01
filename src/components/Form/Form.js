@@ -6,11 +6,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import useAddEmployee from '../../utils/AddEmployee';
 import { gql, useMutation } from '@apollo/client';
-import { createEmployee } from '../../graphql/mutations';
+import { createEmployee} from '../../graphql/mutations';
 
 const ADD_EMPLOYEE = gql(createEmployee);
+
 
 
 const EntryForm = () => {

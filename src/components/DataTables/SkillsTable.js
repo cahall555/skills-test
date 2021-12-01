@@ -9,17 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { gql, useQuery } from '@apollo/client';
+import { listSkills } from '../../graphql/queries';
 
-const LIST_SKILLS_QUERY = gql`
-        query LIST_SKILLS_QUERY {
-            listSkills {
-            items {
-                id
-                name
-            }
-            }
-        }
-        `;
+const LIST_SKILLS_QUERY = gql(listSkills);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
