@@ -8,7 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import useFetchSkills from 'utils/FetchSkills';
+import { gql, useQuery } from '@apollo/client';
+import { listSkills } from '../../graphql/queries';
+
+const LIST_SKILLS_QUERY = gql(listSkills);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -28,7 +31,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 const SkillsTable =() => {
-  const {Skills} = useFetchSkills();
+  const { loading, error, data } =  useQuery(LIST_SKILLS_QUERY);
+  if (loading) return (<p>Loading...</p>);
+  if (error) return (<p>Error : {error.message}</p>);
 
   return (
     <React.Fragment>
@@ -44,7 +49,7 @@ const SkillsTable =() => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Skills.map((Skill) => (
+          {data.listSkills.items.map((Skill) => (
             <StyledTableRow
               key={Skill.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

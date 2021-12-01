@@ -17,7 +17,10 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import useFetchEmployees from '../../utils/FetchEmployees';
+import { gql, useQuery } from '@apollo/client';
+import { listEmployees } from '../../graphql/queries';
+
+const LIST_EMPLOYEE_QUERY = gql(listEmployees);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -97,14 +100,15 @@ TablePaginationActions.propTypes = {
 
 
 const EmployeeTable =() => {
-
-  const {Employees} = useFetchEmployees();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { loading, error, data } =  useQuery(LIST_EMPLOYEE_QUERY);
+  if (loading) return (<p>Loading...</p>);
+  if (error) return (<p>Error : {error.message}</p>);
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Employees.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.listEmployees.items.length) : 0;
 
     const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -131,8 +135,8 @@ const EmployeeTable =() => {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? Employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : Employees
+            ? data.listEmployees.items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : data.listEmployees.items
           ).map((Employee) => (
             <StyledTableRow
               key={Employee.id}
@@ -158,7 +162,7 @@ const EmployeeTable =() => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={Employees.length}
+              count={data.listEmployees.items.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
