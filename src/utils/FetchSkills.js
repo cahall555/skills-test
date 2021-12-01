@@ -1,6 +1,5 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-// import { LIST_SKILLS_QUERY} from '../components/Apollo/ListSkills';
 
 function List({skills}) {
     return (
@@ -35,7 +34,4 @@ const useFetchSkills = () => {
             </div>
         );
         }
-        // return {data.allSkills}
-    // }
-// }
 export default useFetchSkills;
