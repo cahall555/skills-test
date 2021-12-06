@@ -7,16 +7,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { gql, useMutation } from '@apollo/client';
-import { createEmployee} from '../../graphql/mutations';
+import { createSkill} from '../../graphql/mutations';
 
-const ADD_EMPLOYEE = gql(createEmployee);
+const ADD_Skill = gql(createSkill);
 
 
 
-const EntryForm = () => {
-    const [createEmployee, { data, loading, error }] = useMutation(ADD_EMPLOYEE);
+const SkillsForm = () => {
+    const [createSkill, { data, loading, error }] = useMutation(ADD_Skill);
 
-    const initialState = { id: '', firstname: '', lastname: '' }
+    const initialState = { id: '', name: ''}
     const [formState, setFormState] = useState(initialState)
 
     const setInput = (key, value) => {
@@ -31,7 +31,7 @@ const EntryForm = () => {
   return (
     <Box sx={{ display: 'flex', width: "100%", justifyContent: "center" }}>
       <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-        <FormLabel component="legend">Add Employees</FormLabel>
+        <FormLabel component="legend">Add Skills</FormLabel>
         <FormGroup>
           <FormControlLabel
             control={
@@ -46,27 +46,19 @@ const EntryForm = () => {
             control={
                 <TextField
                 value={formState.firstname}
-                onChange={event => setInput('firstname', event.target.value)}
-                label="First Name"
+                onChange={event => setInput('name', event.target.value)}
+                label="Skill"
               />
             }
           />
-          <FormControlLabel
-            control={
-                <TextField
-                onChange={event => setInput('lastname', event.target.value)}
-                value={formState.lastname}
-                label="Last Name"
-              />
-            }
-          />
+        
           <FormControlLabel 
             control={
                 <Button
                 color="primary" 
                 variant="contained"
-                onClick={()=>{createEmployee({variables:{input:formState}})}}>
-                Create Employee</Button>
+                onClick={()=>{createSkill({variables:{input:formState}})}}>
+                Create Skill</Button>
             }
             />
         </FormGroup>
@@ -76,4 +68,4 @@ const EntryForm = () => {
   );
 }
 
-export default EntryForm;
+export default SkillsForm;

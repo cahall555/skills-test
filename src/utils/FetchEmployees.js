@@ -1,25 +1,27 @@
-import {useState, useEffect} from 'react';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import React, { useState, useEffect } from 'react';
+import { gql, useQuery,  } from '@apollo/client';
 import { listEmployees } from '../graphql/queries';
-import awsExports from '../aws-exports';
-Amplify.configure(awsExports);
+
+const LIST_EMPLOYEES_QUERY = gql(listEmployees);
+
 
 const useFetchEmployees = () => {
-
-const [Employees, setEmployees] = useState([])
+    const [Employees, setEmployees] = useState([])
+ 
+    const { loading, error, data } =  useQuery(LIST_EMPLOYEES_QUERY);
 
     async function fetchEmployees() {
-        try {
-        const EmployeeData = await API.graphql(graphqlOperation(listEmployees))
-        const Employees = EmployeeData.data.listEmployees.items
+       
+      try{
+        const Employees = data.listEmployees.items
         setEmployees(Employees)
-        } catch (err) { console.log('error fetching Employees') }
+      } catch (err) { console.log('error fetching employees') }
     }
-
     useEffect(() => {
-        fetchEmployees()
-    }, [])
-    return {Employees}
-}
+      fetchEmployees()
+  }, [data, loading, error])
+  return [Employees, setEmployees, loading, error]
+   
+  }
 
-export default useFetchEmployees;
+export default useFetchEmployees
