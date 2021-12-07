@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import { gql, useMutation } from '@apollo/client';
 import { deleteSkill} from '../../graphql/mutations';
 import { updateSkill} from '../../graphql/mutations';
@@ -36,6 +37,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const SkillsTable =({data}) => {
   const [deleteSkill] = useMutation(DELETE_SKILL);
+
 
   return (
     <React.Fragment>

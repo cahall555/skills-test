@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import EmployeeTable from './components/DataTables/EmployeeTable';
 import SkillsTable from './components/DataTables/SkillsTable';
-import SkillsDialog from './components/SkillsDialog/SkillsDialog';
 import EntryForm from './components/Form/Form';
 import SkillsForm from './components/Form/SkillsForm';
 import useFetchSkills from 'utils/FetchSkills';
@@ -23,7 +22,6 @@ const App = () => {
 
   return (
     <React.Fragment> 
-      {/* <SkillsDialog /> */}
       
       <Box sx={{ width: '100%' }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
