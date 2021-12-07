@@ -1,41 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import PropTypes from 'prop-types';
-import { styled, useTheme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Input from "@material-ui/core/Input";
+import Paper from "@material-ui/core/Paper";
+import Button from '@material-ui/core/Button';
+import IconButton from "@material-ui/core/IconButton";
+import FullScreenDialog from '../SkillsDialog/Dialog';
+// Icons
+import EditIcon from "@material-ui/icons/EditOutlined";
+import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
+import SaveIcon from "@material-ui/icons/Save";
+import DeleteIcon from "@material-ui/icons/Delete";
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { gql, useQuery } from '@apollo/client';
-import { listEmployees } from '../../graphql/queries';
 
-const LIST_EMPLOYEE_QUERY = gql(listEmployees);
+import { gql, useMutation } from '@apollo/client';
+import { updateEmployee} from '../../graphql/mutations';
+import { deleteEmployee } from "../../graphql/mutations";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-    fontSize: 14,}));
+const UPDATE_EMPLOYEE = gql (updateEmployee);
+const DELETE_EMPLOYEE = gql (deleteEmployee);
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing(3),
+    overflowX: "auto"
   },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
+  table: {
+    minWidth: 650
   },
+  selectTableCell: {
+    width: 60
+  },
+  tableCell: {
+    width: 130,
+    height: 40
+  },
+  input: {
+    width: 130,
+    height: 40
+  }
 }));
+
+const CustomTableCell = ({ row, name, onChange, onClick }) => {
+  const classes = useStyles();
+  const { isEditMode } = row;
+  return (
+    <TableCell align="left" className={classes.tableCell}>
+      {isEditMode ? (
+        <Input
+          value={row[name]}
+          name={name}
+          onChange={event => onChange(event,row)}
+          className={classes.input}
+        />
+      ) : (
+        <Button onClick={onClick}>{row[name]}</Button>
+      )}
+    </TableCell>
+  );
+};
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -99,61 +135,121 @@ TablePaginationActions.propTypes = {
 };
 
 
-const EmployeeTable =() => {
+
+
+const EmployeeTable = ({data, setRows}) => {
+  const [updateEmployee] = useMutation(UPDATE_EMPLOYEE);
+  const [deleteEmployee] = useMutation(DELETE_EMPLOYEE);
+
+  const [previous, setPrevious] = useState({});
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { loading, error, data } =  useQuery(LIST_EMPLOYEE_QUERY);
-  if (loading) return (<p>Loading...</p>);
-  if (error) return (<p>Error : {error.message}</p>);
+  const classes = useStyles();
 
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.listEmployees.items.length) : 0;
+  const onToggleEditMode = id => {
+    setRows(state => {
+      return data.map(row => {
+        if (row.id === id) {
+          return { ...row, isEditMode: !row.isEditMode };
+        }
+        return row;
+      });
+    });
+  };
 
-    const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    };
 
-    const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-    };
+  const onChange = (event, row) => {
+    if (!previous[row.id]) {
+      setPrevious(state => ({ ...state, [row.id]: row }));
+      
+    }
+    const value = event.target.value;
+    const name = event.target.name;
+    const { id } = row;
+    const newRows = data.map(row => {
+      if (row.id === id) {
+        return { ...row, [name]: value };
+      }
+      return row;
+    });
+    setRows(newRows);
+  };
 
+   // Avoid a layout jump when reaching the last page with empty rows.
+   const emptyRows =
+   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+   const handleChangePage = (event, newPage) => {
+   setPage(newPage);
+   };
+
+   const handleChangeRowsPerPage = (event) => {
+   setRowsPerPage(parseInt(event.target.value, 10));
+   setPage(0);
+   };
+   const [currentEmployeeId, setCurrentEmployeeId] = useState (undefined)
   return (
-    <React.Fragment>
-    <TableContainer component={Paper}>
-    <Typography variant="h3" component="div" gutterBottom>
-        Employees
-      </Typography>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <Paper className={classes.root}>
+      <Table className={classes.table} aria-label="caption table">
+        <caption>Update Employees.</caption>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">ID</StyledTableCell>
-            <StyledTableCell align="left">First Name</StyledTableCell>
-            <StyledTableCell align="left">Last Name</StyledTableCell>
+            <TableCell align="left" />
+            <TableCell align="left">Id</TableCell>
+            <TableCell align="left">First Name</TableCell>
+            <TableCell align="left">Last Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? data.listEmployees.items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : data.listEmployees.items
-          ).map((Employee) => (
-            <StyledTableRow
-              key={Employee.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <StyledTableCell component="th" scope="row" align="center">
-                {Employee.id}
-              </StyledTableCell>
-              <TableCell align="left">{Employee.firstname}</TableCell>
-              <TableCell align="left">{Employee.lastname}</TableCell>
-  
-            </StyledTableRow>
+            ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : data
+          ).map(row => (
+            <TableRow key={row.id}>
+              <TableCell className={classes.selectTableCell}>
+                {row.isEditMode ? (
+                  <>
+                    <IconButton
+                      aria-label="done"
+                      onClick={() => onToggleEditMode(row.id)}
+                    >
+                      <DoneIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="save"
+                      onClick={()=>{updateEmployee({variables:
+                        {input:{
+                          id: row.id, 
+                          firstname: row.firstname, 
+                          lastname:row.lastname}}
+                        })}}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                    <IconButton
+                    aria-label="delete"
+                    onClick={()=>{deleteEmployee({variables:{input: {id: row.id}}})}}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  </>
+                ) : (
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => onToggleEditMode(row.id)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                )}
+              </TableCell>
+              <CustomTableCell {...{ row, name: "id", onChange, onClick:() => setCurrentEmployeeId(row.id) }} />
+              <CustomTableCell {...{ row, name: "firstname", onChange }} />
+              <CustomTableCell {...{ row, name: "lastname", onChange }} />
+            </TableRow>
           ))}
-
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <CustomTableCell colSpan={6} />
             </TableRow>
           )}
         </TableBody>
@@ -162,7 +258,7 @@ const EmployeeTable =() => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={data.listEmployees.items.length}
+              count={data.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
@@ -178,8 +274,9 @@ const EmployeeTable =() => {
           </TableRow>
         </TableFooter>
       </Table>
-    </TableContainer>
-    </React.Fragment>
+       <FullScreenDialog id={currentEmployeeId} handleClose={() => setCurrentEmployeeId(undefined)}/>
+    </Paper>
   );
 }
+
 export default EmployeeTable;

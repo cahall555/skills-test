@@ -142,7 +142,7 @@ const PersistentDrawerLeft = () => {
               <HomeIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Home</ListItemText>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="textSecondary">
             </Typography>
           </MenuItem>
           <MenuItem component={Link} to="/employee">
@@ -150,7 +150,7 @@ const PersistentDrawerLeft = () => {
               <PersonIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Employee</ListItemText>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="textSecondary">
             </Typography>
           </MenuItem>
           <MenuItem component={Link} to="/skills">
@@ -158,7 +158,7 @@ const PersistentDrawerLeft = () => {
               <AdjustIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Skills</ListItemText>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="textSecondary">
             </Typography>
           </MenuItem>
         </MenuList>

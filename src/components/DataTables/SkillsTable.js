@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,10 +8,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { gql, useQuery } from '@apollo/client';
-import { listSkills } from '../../graphql/queries';
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/EditOutlined";
+import { gql, useMutation } from '@apollo/client';
+import { deleteSkill} from '../../graphql/mutations';
+import { updateSkill} from '../../graphql/mutations';
 
-const LIST_SKILLS_QUERY = gql(listSkills);
+const DELETE_SKILL = gql(deleteSkill);
+const UPDATE_SKILL = gql (updateSkill);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -30,10 +35,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-const SkillsTable =() => {
-  const { loading, error, data } =  useQuery(LIST_SKILLS_QUERY);
-  if (loading) return (<p>Loading...</p>);
-  if (error) return (<p>Error : {error.message}</p>);
+const SkillsTable =({data}) => {
+  const [deleteSkill] = useMutation(DELETE_SKILL);
+
 
   return (
     <React.Fragment>
@@ -44,16 +48,25 @@ const SkillsTable =() => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+             <StyledTableCell align="center"></StyledTableCell>
             <StyledTableCell align="center">ID</StyledTableCell>
             <StyledTableCell align="left">Skill</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.listSkills.items.map((Skill) => (
+          {data.map((Skill) => (
             <StyledTableRow
               key={Skill.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
+              <TableCell>
+               <IconButton
+                    aria-label="delete"
+                    onClick={()=>{deleteSkill({variables:{input: {id: Skill.id}}})}}
+                  >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
               <StyledTableCell component="th" scope="row" align="center">
                 {Skill.id}
               </StyledTableCell>
