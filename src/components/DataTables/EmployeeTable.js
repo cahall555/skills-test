@@ -11,7 +11,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Input from "@material-ui/core/Input";
 import Paper from "@material-ui/core/Paper";
+import Button from '@material-ui/core/Button';
 import IconButton from "@material-ui/core/IconButton";
+import FullScreenDialog from '../SkillsDialog/Dialog';
 // Icons
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
@@ -52,7 +54,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomTableCell = ({ row, name, onChange }) => {
+const CustomTableCell = ({ row, name, onChange, onClick }) => {
   const classes = useStyles();
   const { isEditMode } = row;
   return (
@@ -65,7 +67,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
           className={classes.input}
         />
       ) : (
-        row[name]
+        <Button onClick={onClick}>{row[name]}</Button>
       )}
     </TableCell>
   );
@@ -185,7 +187,7 @@ const EmployeeTable = ({data, setRows}) => {
    setRowsPerPage(parseInt(event.target.value, 10));
    setPage(0);
    };
-
+   const [currentEmployeeId, setCurrentEmployeeId] = useState (undefined)
   return (
     <Paper className={classes.root}>
       <Table className={classes.table} aria-label="caption table">
@@ -240,7 +242,7 @@ const EmployeeTable = ({data, setRows}) => {
                   </IconButton>
                 )}
               </TableCell>
-              <CustomTableCell {...{ row, name: "id", onChange }} />
+              <CustomTableCell {...{ row, name: "id", onChange, onClick:() => setCurrentEmployeeId(row.id) }} />
               <CustomTableCell {...{ row, name: "firstname", onChange }} />
               <CustomTableCell {...{ row, name: "lastname", onChange }} />
             </TableRow>
@@ -272,6 +274,7 @@ const EmployeeTable = ({data, setRows}) => {
           </TableRow>
         </TableFooter>
       </Table>
+       <FullScreenDialog id={currentEmployeeId} handleClose={() => setCurrentEmployeeId(undefined)}/>
     </Paper>
   );
 }
