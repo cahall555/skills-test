@@ -29,13 +29,14 @@ const FullScreenDialog =({id, handleClose}) => {
   const { loading, error, data } =  useQuery(GET_EMPLOYEE_QUERY, { variables: { id } });
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
+
+  const skill = data.getEmployee.skills.items.map(skill => skill.skill
+  );
  
-  console.log(data)
+  console.log(skill)
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Review Employee
-      </Button> */}
+    
       <Dialog
         fullScreen
         open={open}
@@ -77,7 +78,7 @@ const FullScreenDialog =({id, handleClose}) => {
                   />
           </ListItem>
         </List>
-        <SkillsTable data={data.getEmployee.skills.items} />
+        <SkillsTable data={skill} />
           
       </Dialog>
     </div>
