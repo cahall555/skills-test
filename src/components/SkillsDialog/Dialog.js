@@ -14,6 +14,7 @@ import { gql, useQuery,  } from '@apollo/client';
 import { getEmployee } from '../../graphql/queries';
 import SkillsTable from 'components/DataTables/SkillsTable';
 import SkillsDialog from './SkillsDialog';
+import useFetchSkills from 'utils/FetchSkills';
 
 const GET_EMPLOYEE_QUERY = gql(getEmployee);
 
@@ -27,13 +28,15 @@ const FullScreenDialog =({id, handleClose}) => {
     
   const open =id != undefined;
   const { loading, error, data } =  useQuery(GET_EMPLOYEE_QUERY, { variables: { id } });
+  const [listSkills, setSkills] = useFetchSkills();
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
-  const skill = data.getEmployee.skills.items.map(skill => skill.skill
+  const employeeSkill = data.getEmployee.skills.items.map(employeeSkill => employeeSkill.skill
   );
  
-  console.log(skill)
+
+  console.log(employeeSkill)
   return (
     <div>
     
@@ -81,10 +84,10 @@ const FullScreenDialog =({id, handleClose}) => {
           </List>
         </Box>
         <Box pt={3}>
-          <SkillsDialog data={data.getEmployee.id}/>
+          <SkillsDialog data={data} skills={listSkills}/>
         </Box>
         <Box pt={3}>
-          <SkillsTable data={skill} />
+          <SkillsTable data={employeeSkill} />
         </Box>
         
           

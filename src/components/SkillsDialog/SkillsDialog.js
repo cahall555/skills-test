@@ -11,11 +11,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import { gql, useMutation } from '@apollo/client';
 import {createEmployeeSkills} from '../../graphql/mutations';
+import SelectSkills from 'components/Dropdown/SkillsDropdown';
 
 
 const CREATE_EMPLOYEE_SKILL = gql(createEmployeeSkills);
 
-const SkillsDialog = ({data}) => {
+const SkillsDialog = ({data, skills}) => {
     const [open, setOpen] = useState(false);
     const [values, setValues] = useState([]);
     const [addSkillEmployee, { update, loading, error }] = useMutation(CREATE_EMPLOYEE_SKILL);
@@ -57,6 +58,7 @@ const SkillsDialog = ({data}) => {
           <DialogTitle id="form-dialog-title">Add Skills</DialogTitle>
           <DialogContent>
             <DialogContentText>Add Employee Skills.</DialogContentText>
+            
             <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
               <FormGroup>
                 <FormControlLabel
@@ -71,6 +73,7 @@ const SkillsDialog = ({data}) => {
                     />
                     }
                 />
+                <SelectSkills skills={skills}/>
               <FormControlLabel
                 control={
                   <TextField
