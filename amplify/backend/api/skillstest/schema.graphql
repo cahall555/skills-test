@@ -5,7 +5,7 @@ type Employee @model {
   skills: [EmployeeSkills] @connection(name: "EmployeeSkills")
 }
 
-type EmployeeSkills @model (queries: null){
+type EmployeeSkills @model {
   id: ID!
   employee: Employee @connection(name: "EmployeeSkills")
   skill: Skill @connection(name: "SkillEmployees")
