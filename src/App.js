@@ -21,10 +21,10 @@ const App = () => {
  
 
   return (
-    <React.Fragment> 
+    <> 
       
       <Box sx={{ width: '100%' }}>
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid container rowspacing={1} columnspacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>
         <EntryForm />
         </Grid>
@@ -33,10 +33,12 @@ const App = () => {
         </Grid>
       </Grid>
     </Box>
+    <Box pt={8}>
     <Divider />
       {loading ? <p>Loading...</p> :<EmployeeTable data={employees} setRows = {setEmployees}/>}
       <SkillsTable data={skills}/>
-  </React.Fragment>
+    </Box>
+  </>
   )
 }
 

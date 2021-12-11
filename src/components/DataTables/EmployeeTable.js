@@ -219,7 +219,7 @@ const EmployeeTable = ({data, setRows}) => {
                       aria-label="save"
                       onClick={()=>{updateEmployee({variables:
                         {input:{
-                          id: row.id, 
+                          ID: row.id, 
                           firstname: row.firstname, 
                           lastname:row.lastname}}
                         })}}

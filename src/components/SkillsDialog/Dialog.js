@@ -1,10 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
+import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +13,7 @@ import Slide from '@material-ui/core/Slide';
 import { gql, useQuery,  } from '@apollo/client';
 import { getEmployee } from '../../graphql/queries';
 import SkillsTable from 'components/DataTables/SkillsTable';
+import SkillsDialog from './SkillsDialog';
 
 const GET_EMPLOYEE_QUERY = gql(getEmployee);
 
@@ -58,27 +58,35 @@ const FullScreenDialog =({id, handleClose}) => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <List>
-        <ListItem >
-          <ListItemText
-                  primary="Employee ID"
-                  secondary={data.getEmployee.id}
-                />
-        </ListItem>
+        <Box pt={10}>
+          <List>
           <ListItem >
             <ListItemText
-                    primary="First Name"
-                    secondary={data.getEmployee.firstname}
+                    primary="Employee ID"
+                    secondary={data.getEmployee.id}
                   />
           </ListItem>
-          <ListItem >
-            <ListItemText
-                    primary="Last Name"
-                    secondary={data.getEmployee.lastname}
-                  />
-          </ListItem>
-        </List>
-        <SkillsTable data={skill} />
+            <ListItem >
+              <ListItemText
+                      primary="First Name"
+                      secondary={data.getEmployee.firstname}
+                    />
+            </ListItem>
+            <ListItem >
+              <ListItemText
+                      primary="Last Name"
+                      secondary={data.getEmployee.lastname}
+                    />
+            </ListItem>
+          </List>
+        </Box>
+        <Box pt={3}>
+          <SkillsDialog data={data.getEmployee.id}/>
+        </Box>
+        <Box pt={3}>
+          <SkillsTable data={skill} />
+        </Box>
+        
           
       </Dialog>
     </div>

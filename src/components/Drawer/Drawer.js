@@ -149,7 +149,7 @@ const PersistentDrawerLeft = () => {
             <ListItemIcon>
               <PersonIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Employee</ListItemText>
+            <ListItemText>Employees</ListItemText>
             <Typography variant="body2" color="textSecondary">
             </Typography>
           </MenuItem>
