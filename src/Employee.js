@@ -1,18 +1,20 @@
 /* src/App.js */
-import React from 'react'
-import EmployeeTable from './components/DataTables/EmployeeTable';
-import useFetchEmployees from 'utils/FetchEmployees';
-
-
+import React from "react";
+import EmployeeTable from "./components/DataTables/EmployeeTable";
+import useFetchEmployees from "utils/FetchEmployees";
 
 const EmployeePage = () => {
-      const [employees, setEmployees, loading, error] = useFetchEmployees();
-  
-  return (
-        <main>
-              {loading ? <p>Loading...</p> :<EmployeeTable data={employees} setRows = {setEmployees}/>}
-        </main>
-  )
-}
+  const [employees, setEmployees, loading, error] = useFetchEmployees();
 
-export default EmployeePage
+  return (
+    <main>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <EmployeeTable data={employees} setRows={setEmployees} />
+      )}
+    </main>
+  );
+};
+
+export default EmployeePage;

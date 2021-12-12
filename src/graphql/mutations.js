@@ -1,6 +1,37 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const deleteEmployeeSkillsBySkillId = /* GraphQL */ `
+  mutation DeleteEmployeeSkillsBySkillId($input: EmployeeSkillsBySkillIdInput) {
+    deleteEmployeeSkillsBySkillId(input: $input) {
+      id
+      name
+      employees {
+        items {
+          id
+          employee {
+            id
+            firstname
+            lastname
+            createdAt
+            updatedAt
+          }
+          skill {
+            id
+            name
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createEmployee = /* GraphQL */ `
   mutation CreateEmployee(
     $input: CreateEmployeeInput!

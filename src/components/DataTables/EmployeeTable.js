@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,64 +11,67 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Input from "@material-ui/core/Input";
 import Paper from "@material-ui/core/Paper";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import FullScreenDialog from '../SkillsDialog/Dialog';
+import FullScreenDialog from "../SkillsDialog/Dialog";
 // Icons
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
+import FirstPageIcon from "@material-ui/icons/FirstPage";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import LastPageIcon from "@material-ui/icons/LastPage";
 
-import { gql, useMutation } from '@apollo/client';
-import { updateEmployee} from '../../graphql/mutations';
+import { gql, useMutation } from "@apollo/client";
+import { updateEmployee } from "../../graphql/mutations";
 import { deleteEmployee } from "../../graphql/mutations";
 
-const UPDATE_EMPLOYEE = gql (updateEmployee);
-const DELETE_EMPLOYEE = gql (deleteEmployee);
+const UPDATE_EMPLOYEE = gql(updateEmployee);
+const DELETE_EMPLOYEE = gql(deleteEmployee);
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
-    overflowX: "auto"
+    overflowX: "auto",
   },
   table: {
-    minWidth: 650
+    minWidth: 650,
   },
   selectTableCell: {
-    width: 60
+    width: 60,
   },
   tableCell: {
     width: 130,
-    height: 40
+    height: 40,
   },
   input: {
     width: 130,
-    height: 40
-  }
+    height: 40,
+  },
 }));
 
 const CustomTableCell = ({ row, name, onChange, onClick }) => {
   const classes = useStyles();
-  const { isEditMode } = row;
+  let form = <></>;
+  if (typeof row !== "undefined") {
+    form = row.isEditMode ? (
+      <Input
+        value={row[name]}
+        name={name}
+        onChange={(event) => onChange(event, row)}
+        className={classes.input}
+      />
+    ) : (
+      <Button onClick={onClick}>{row[name]}</Button>
+    );
+  }
+
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {isEditMode ? (
-        <Input
-          value={row[name]}
-          name={name}
-          onChange={event => onChange(event,row)}
-          className={classes.input}
-        />
-      ) : (
-        <Button onClick={onClick}>{row[name]}</Button>
-      )}
+      {form}
     </TableCell>
   );
 };
@@ -100,28 +103,36 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
@@ -134,10 +145,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-
-
-
-const EmployeeTable = ({data, setRows}) => {
+const EmployeeTable = ({ data, setRows }) => {
   const [updateEmployee] = useMutation(UPDATE_EMPLOYEE);
   const [deleteEmployee] = useMutation(DELETE_EMPLOYEE);
 
@@ -146,9 +154,9 @@ const EmployeeTable = ({data, setRows}) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
 
-  const onToggleEditMode = id => {
-    setRows(state => {
-      return data.map(row => {
+  const onToggleEditMode = (id) => {
+    setRows((state) => {
+      return data.map((row) => {
         if (row.id === id) {
           return { ...row, isEditMode: !row.isEditMode };
         }
@@ -157,16 +165,14 @@ const EmployeeTable = ({data, setRows}) => {
     });
   };
 
-
   const onChange = (event, row) => {
     if (!previous[row.id]) {
-      setPrevious(state => ({ ...state, [row.id]: row }));
-      
+      setPrevious((state) => ({ ...state, [row.id]: row }));
     }
     const value = event.target.value;
     const name = event.target.name;
     const { id } = row;
-    const newRows = data.map(row => {
+    const newRows = data.map((row) => {
       if (row.id === id) {
         return { ...row, [name]: value };
       }
@@ -175,19 +181,19 @@ const EmployeeTable = ({data, setRows}) => {
     setRows(newRows);
   };
 
-   // Avoid a layout jump when reaching the last page with empty rows.
-   const emptyRows =
-   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-   const handleChangePage = (event, newPage) => {
-   setPage(newPage);
-   };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-   const handleChangeRowsPerPage = (event) => {
-   setRowsPerPage(parseInt(event.target.value, 10));
-   setPage(0);
-   };
-   const [currentEmployeeId, setCurrentEmployeeId] = useState (undefined)
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const [currentEmployeeId, setCurrentEmployeeId] = useState(undefined);
   return (
     <Paper className={classes.root}>
       <Table className={classes.table} aria-label="caption table">
@@ -204,7 +210,7 @@ const EmployeeTable = ({data, setRows}) => {
           {(rowsPerPage > 0
             ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : data
-          ).map(row => (
+          ).map((row) => (
             <TableRow key={row.id}>
               <TableCell className={classes.selectTableCell}>
                 {row.isEditMode ? (
@@ -217,21 +223,30 @@ const EmployeeTable = ({data, setRows}) => {
                     </IconButton>
                     <IconButton
                       aria-label="save"
-                      onClick={()=>{updateEmployee({variables:
-                        {input:{
-                          id: row.id, 
-                          firstname: row.firstname, 
-                          lastname:row.lastname}}
-                        })}}
+                      onClick={() => {
+                        updateEmployee({
+                          variables: {
+                            input: {
+                              id: row.id,
+                              firstname: row.firstname,
+                              lastname: row.lastname,
+                            },
+                          },
+                        });
+                      }}
                     >
                       <SaveIcon />
                     </IconButton>
                     <IconButton
-                    aria-label="delete"
-                    onClick={()=>{deleteEmployee({variables:{input: {id: row.id}}})}}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                      aria-label="delete"
+                      onClick={() => {
+                        deleteEmployee({
+                          variables: { input: { id: row.id } },
+                        });
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </>
                 ) : (
                   <IconButton
@@ -242,7 +257,14 @@ const EmployeeTable = ({data, setRows}) => {
                   </IconButton>
                 )}
               </TableCell>
-              <CustomTableCell {...{ row, name: "id", onChange, onClick:() => setCurrentEmployeeId(row.id) }} />
+              <CustomTableCell
+                {...{
+                  row,
+                  name: "id",
+                  onChange,
+                  onClick: () => setCurrentEmployeeId(row.id),
+                }}
+              />
               <CustomTableCell {...{ row, name: "firstname", onChange }} />
               <CustomTableCell {...{ row, name: "lastname", onChange }} />
             </TableRow>
@@ -256,14 +278,14 @@ const EmployeeTable = ({data, setRows}) => {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
               colSpan={3}
               count={data.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
                 inputProps: {
-                  'aria-label': 'rows per page',
+                  "aria-label": "rows per page",
                 },
                 native: true,
               }}
@@ -274,9 +296,14 @@ const EmployeeTable = ({data, setRows}) => {
           </TableRow>
         </TableFooter>
       </Table>
-       <FullScreenDialog id={currentEmployeeId} handleClose={() => setCurrentEmployeeId(undefined)}/>
+      {currentEmployeeId ? (
+        <FullScreenDialog
+          id={currentEmployeeId}
+          handleClose={() => setCurrentEmployeeId(undefined)}
+        />
+      ) : null}
     </Paper>
   );
-}
+};
 
 export default EmployeeTable;

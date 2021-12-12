@@ -1,0 +1,15 @@
+## Mutation.deleteEmployeeSkillsBySkillId.req.vtl **
+
+
+
+{
+  "version": "2018-05-29",
+  "operation": "DeleteItem",
+  
+    "condition" : {
+        "expression"       : "employeeSkillsSkillId  = :employeeSkillsSkillId",
+        "expressionValues" : {
+            ":employeeSkillsSkillId" : $util.dynamodb.toDynamoDBJson($ctx.args.id)
+        }
+    }
+}

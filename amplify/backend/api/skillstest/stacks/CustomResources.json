@@ -26,12 +26,6 @@
       "Description": "An S3 key relative to the S3DeploymentBucket that points to the root\nof the deployment directory."
     }
   },
-  "Resources": {
-    "EmptyResource": {
-      "Type": "Custom::EmptyResource",
-      "Condition": "AlwaysFalse"
-    }
-  },
   "Conditions": {
     "HasEnvironmentParameter": {
       "Fn::Not": [
@@ -53,6 +47,45 @@
     "EmptyOutput": {
       "Description": "An empty output. You may delete this if you have at least one resource above.",
       "Value": ""
+    }
+  },
+  "Resources": {
+    "MutationEmployeeSkillsTableResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "DataSourceName": "EmployeeSkillsTable",
+        "TypeName": "Mutation",
+        "FieldName": "deleteEmployeeSkillsBySkillId",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.deleteEmployeeSkillsBySkillId.req.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.deleteEmployeeSkillsBySkillId.resp.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        }
+      }
     }
   }
 }

@@ -12,7 +12,5 @@
       "ServerlessContainers": true
     }
   },
-  "providers": [
-    "awscloudformation"
-  ]
+  "providers": ["awscloudformation"]
 }
