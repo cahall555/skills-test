@@ -1,13 +1,10 @@
-import React from 'react';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import React from "react";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
-const SelectSkills = ({skills, value, onValueChange}) => {
-
-
-
+const SelectSkills = ({ skills, value, onValueChange }) => {
   return (
     <div>
       <FormControl variant="standard" sx={{ Width: 300 }}>
@@ -19,19 +16,18 @@ const SelectSkills = ({skills, value, onValueChange}) => {
           onChange={(event) => onValueChange(event.target.value)}
           label="Skill"
         >
-        
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
           {skills.map((Skill) => (
-          <MenuItem 
-          key = {Skill.id}
-          value={Skill.id}>{Skill.name}</MenuItem>
+            <MenuItem key={Skill.id} value={Skill.id}>
+              {Skill.name}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
     </div>
   );
-}
+};
 
 export default SelectSkills;
