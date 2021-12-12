@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Employees and Skills
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Employees and Skills](https://d20powodwu7s05.cloudfront.net/) is an application that allows users to enter and manage basic employee and skill information. 
 
-## Available Scripts
+### Get Started
 
-In the project directory, you can run:
+1. Click on the link above and follow login/create account prompt.
+2. Navigation options can be found by clicking the hamburger menu in the upper left hand corner.
+3. The home page contains forms for entering new employees and skills.
+4. The skills page displays a static table of skills.
+5. The employee page displays the employee table with edit and delete functionality. 
+6. Employee id's on the employee table are clickable.
+    * Links display the employee and how they are associated to skills.
 
-### `npm start`
+### Testing
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Create new employees and skills by using forms found at the top of the home page.
+2. To update, or delete an employee click on pencil to the left of the employee. 
+    * toggle form will allow necessary changes to the employee, and icons to the left will complete requests.
+3. To view an employee click on the employee id on the employee table. 
+    * The add skills button will allow skills to be associated with an employee.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Local development 
 
-### `npm test`
+If interested in local development and testing please open an issue to request appropriate credentials from `@cahall555`. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Future Application Growth
 
-### `npm run build`
+* Update skill deletion 
+    * Cascade delete is necessary to accommodate all use cases. 
+        1. Delete skill from employee by removing skill from employee skills join table. 
+        2. Remove skill entirely by removing all instances of skill from employee skill join table and skill table.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* Change formatting of employee id to create more direction for end user (id is clickable)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Update id's from simple string to auto generated and unique uuid's
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Implement full CRUD on skills table
 
-### `npm run eject`
+* Implement sort and filter on skills and employee tables
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* Implement auto close on menu navigation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Hide menu from login page
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Prevent the same skill from being added twice to an employee
