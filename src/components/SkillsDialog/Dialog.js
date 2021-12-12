@@ -84,7 +84,7 @@ const FullScreenDialog =({id, handleClose}) => {
           </List>
         </Box>
         <Box pt={3}>
-          <SkillsDialog data={data} skills={listSkills}/>
+          <SkillsDialog data={data.getEmployee.id} skills={listSkills}/>
         </Box>
         <Box pt={3}>
           <SkillsTable data={employeeSkill} />

@@ -4,12 +4,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-const SelectSkills = ({skills}) => {
+const SelectSkills = ({skills, value, onValueChange}) => {
 
 
-  // const handleChange = (event) => {
-  //   fetchSkills(event.target.value);
-  // };
 
   return (
     <div>
@@ -18,8 +15,8 @@ const SelectSkills = ({skills}) => {
         <Select
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
-          value={skills}
-          // onChange={handleChange}
+          value={value}
+          onChange={(event) => onValueChange(event.target.value)}
           label="Skill"
         >
         
@@ -27,7 +24,9 @@ const SelectSkills = ({skills}) => {
             <em>None</em>
           </MenuItem>
           {skills.map((Skill) => (
-          <MenuItem value={10}>{Skill.name}</MenuItem>
+          <MenuItem 
+          key = {Skill.id}
+          value={Skill.id}>{Skill.name}</MenuItem>
           ))}
         </Select>
       </FormControl>

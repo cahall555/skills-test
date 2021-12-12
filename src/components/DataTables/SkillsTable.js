@@ -11,12 +11,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import { gql, useMutation } from '@apollo/client';
-import { deleteSkill} from '../../graphql/mutations';
-import { updateSkill} from '../../graphql/mutations';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { deleteSkill, updateSkill,deleteEmployeeSkills} from '../../graphql/mutations';
+import { getEmployee } from 'graphql/queries';
 
 const DELETE_SKILL = gql(deleteSkill);
 const UPDATE_SKILL = gql (updateSkill);
+const DELETE_EMPLOYEE_SKILLS =gql(deleteEmployeeSkills);
+const GET_EMPLOYEE = gql(getEmployee);
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -37,6 +39,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const SkillsTable =({data}) => {
   const [deleteSkill] = useMutation(DELETE_SKILL);
+  // const [deleteEmployeeSkill] = useMutation(DELETE_EMPLOYEE_SKILLS);
+  // const { loading, error, employeeData } =  useQuery(GET_EMPLOYEE, { variables: { id } });
+  // if (loading) return 'Loading...';
+  // if (error) return `Error! ${error.message}`;
+
+  // const handleDelete = () => {
+  //   deleteEmployeeSkill({variables:{input: {id: employeeData}}})
+  //   deleteSkill({variables:{input: {id: Skill.id}}})
+  // };
 
 
   return (

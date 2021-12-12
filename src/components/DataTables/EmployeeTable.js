@@ -56,19 +56,22 @@ const useStyles = makeStyles(theme => ({
 
 const CustomTableCell = ({ row, name, onChange, onClick }) => {
   const classes = useStyles();
-  const { isEditMode } = row;
+  let form=<></>
+  if (typeof row !== "undefined"){
+    form =  row.isEditMode ? (
+      <Input
+        value={row[name]}
+        name={name}
+        onChange={event => onChange(event,row)}
+        className={classes.input}
+      />
+    ) : (
+      <Button onClick={onClick}>{row[name]}</Button>
+    )}
+  
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {isEditMode ? (
-        <Input
-          value={row[name]}
-          name={name}
-          onChange={event => onChange(event,row)}
-          className={classes.input}
-        />
-      ) : (
-        <Button onClick={onClick}>{row[name]}</Button>
-      )}
+     {form}
     </TableCell>
   );
 };
@@ -219,7 +222,7 @@ const EmployeeTable = ({data, setRows}) => {
                       aria-label="save"
                       onClick={()=>{updateEmployee({variables:
                         {input:{
-                          ID: row.id, 
+                          id: row.id, 
                           firstname: row.firstname, 
                           lastname:row.lastname}}
                         })}}
@@ -274,7 +277,7 @@ const EmployeeTable = ({data, setRows}) => {
           </TableRow>
         </TableFooter>
       </Table>
-       <FullScreenDialog id={currentEmployeeId} handleClose={() => setCurrentEmployeeId(undefined)}/>
+       {currentEmployeeId ? <FullScreenDialog id={currentEmployeeId} handleClose={() => setCurrentEmployeeId(undefined)}/> : null}
     </Paper>
   );
 }

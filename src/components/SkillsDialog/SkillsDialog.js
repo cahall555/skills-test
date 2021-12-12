@@ -1,8 +1,6 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -19,16 +17,9 @@ const CREATE_EMPLOYEE_SKILL = gql(createEmployeeSkills);
 const SkillsDialog = ({data, skills}) => {
     const [open, setOpen] = useState(false);
     const [values, setValues] = useState([]);
+    const [currentSkill, setCurrentSkill] = useState('');
     const [addSkillEmployee, { update, loading, error }] = useMutation(CREATE_EMPLOYEE_SKILL);
-    const initialState = { employeeSkillsEmployeeId: {data}, employeeSkillsSkillId: '' }
-    const [formState, setFormState] = useState(initialState)
-    
 
-    const setInput = (key, value) => {
-        setFormState({ ...formState, [key]: value })
-      }
-
-    useEffect(()=>{setFormState(initialState)},[update])
     if (loading) return 'Submitting...';
     if (error) return `Submission error! ${error.message}`;
   
@@ -40,7 +31,7 @@ const SkillsDialog = ({data, skills}) => {
       setValues([]);
     };
     const handleSubmit = () => {
-      addSkillEmployee({variables:{input:formState}});
+      addSkillEmployee({variables:{input: {employeeSkillsEmployeeId: data, employeeSkillsSkillId: currentSkill}}});
       setOpen(false);
       setValues([]);
     };
@@ -61,31 +52,7 @@ const SkillsDialog = ({data, skills}) => {
             
             <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
               <FormGroup>
-                <FormControlLabel
-                    control={
-                      <TextField
-                      autoFocus
-                      margin="dense"
-                      value={formState.employeeSkillsEmployeeId}
-                      onChange={event => setInput('employeeSkillsEmployeeId', event.target.value)}
-                      label="Employee ID"
-                      fullWidth
-                    />
-                    }
-                />
-                <SelectSkills skills={skills}/>
-              <FormControlLabel
-                control={
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    value={formState.employeeSkillsSkillId}
-                    onChange={event => setInput('employeeSkillsSkillId', event.target.value)}
-                    label="Skill ID"
-                />
-                }
-            />
-              
+                <SelectSkills skills={skills} value={currentSkill} onValueChange={setCurrentSkill}/>
               </FormGroup>
               </FormControl>
             </DialogContent>
