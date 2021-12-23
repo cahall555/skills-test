@@ -154,6 +154,17 @@ const EmployeeTable = ({ data, setRows }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
 
+  const onDelete = (id) => {
+    deleteEmployee({
+      variables: { input: { id } },
+    });
+    setRows((state) => {
+      return state.filter(employee => {
+        return id !== employee.id
+      })
+    })
+  }
+
   const onToggleEditMode = (id) => {
     setRows((state) => {
       return data.map((row) => {
@@ -240,9 +251,7 @@ const EmployeeTable = ({ data, setRows }) => {
                     <IconButton
                       aria-label="delete"
                       onClick={() => {
-                        deleteEmployee({
-                          variables: { input: { id: row.id } },
-                        });
+                        onDelete(row.id)
                       }}
                     >
                       <DeleteIcon />
